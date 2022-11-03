@@ -1,12 +1,12 @@
 [submodule "cc-app"]
 	path = cc-app
-	url = https://github.com/alexbrickwedde/cc-app
+	url = https://github.com/brickwedde-dev/cc-app
 	branch = main
 [submodule "cc-material-helpers"]
 	path = cc-material-helpers
-	url = https://github.com/alexbrickwedde/cc-material-helpers
+	url = https://github.com/brickwedde-dev/cc-material-helpers
 	branch = main
 [submodule "cc-resize-component"]
 	path = cc-resize-component
-	url = https://github.com/alexbrickwedde/cc-resize-component
+	url = https://github.com/brickwedde-dev/cc-resize-component
 	branch = main
