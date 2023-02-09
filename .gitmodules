@@ -1,12 +1,24 @@
 [submodule "cc-app"]
-	path = cc-app
+	path = client/cc-app
 	url = https://github.com/brickwedde-dev/cc-app
 	branch = main
 [submodule "cc-material-helpers"]
-	path = cc-material-helpers
+	path = client/cc-material-helpers
 	url = https://github.com/brickwedde-dev/cc-material-helpers
 	branch = main
 [submodule "cc-resize-component"]
-	path = cc-resize-component
+	path = client/cc-resize-component
 	url = https://github.com/brickwedde-dev/cc-resize-component
+	branch = main
+[submodule "cc-webserver"]
+	path = client/cc-webserver
+	url = https://github.com/brickwedde-dev/cc-webserver
+	branch = main
+[submodule "client/cc-api-client"]
+	path = client/cc-api-client
+	url = https://github.com/brickwedde-dev/cc-api-client
+	branch = main
+[submodule "server/cc-server"]
+	path = server/cc-server
+	url = https://github.com/brickwedde-dev/cc-server
 	branch = main
