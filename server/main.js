@@ -1,5 +1,6 @@
 const { StorageNedbPlugin } = require("./cc-server/storage-nedb.js");
 const { AuthSimplePlugin } = require("./cc-server/authsimple.js");
+const { SsePlugin } = require("./cc-server/sse.js");
 const { Core } = require("./cc-server/core.js");
 const fssync = require('fs');
 
@@ -17,6 +18,18 @@ var authPlugin = new AuthSimplePlugin(authStorage, "users", "sessions");
 var core = new Core();
 core.authPlugin = authPlugin;
 core.addPlugin("auth", authPlugin);
+
+class SseApi {
+  testsse (oInfo) { }
+}
+
+var sseApi = new SseApi();
+setInterval(() => {
+    sseApi.testsse(Date.now());
+}, 10000);
+
+var ssePlugin = new SsePlugin(sseApi);
+core.addPlugin("sse", ssePlugin);
 
 var storage = new StorageNedbPlugin(["test1", "test2"], options)
 core.addPlugin("teststorage", storage);

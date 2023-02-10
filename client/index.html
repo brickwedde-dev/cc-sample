@@ -23,7 +23,7 @@
 <script type="text/javascript" src="cc-material-helpers/CcMdcChips.js"></script>
 <script type="text/javascript" src="cc-material-helpers/CcAceEditor.js"></script>
 <script type="text/javascript" src="cc-material-helpers/CcMdcFloatingActionButton.js"></script>
-<script type="text/javascript" src="cc-api-client/CcApi.js"></script><script type="text/javascript" src="cc-resize-component/CcResizeComponent.js"></script>
+<script type="text/javascript" src="cc-api-client/CcApi2.js"></script>
 <script type="text/javascript" src="cc-app/CcApp.js"></script>
 </head>
 <body>
@@ -34,8 +34,44 @@
 
 var ccApp = document.querySelector("cc-app");
 var core1Api = document.querySelector("cc-api");
+
+var count = 0;
+
+class App {
+  checksession() {
+    core1Api.authorizationBearer = localStorage.getItem("sessionkey");
+    core1Api.methods["auth/checksessionkey"]()
+    .then((oInfo) => {
+      this.session = oInfo.session;
+      this.user = oInfo.user;
+    })
+    .catch((e) => {
+      this.doLogin();
+    });
+  }
+
+  doLogin() {
+    if (count > 0) {
+      alert("failed")
+      return;
+    }
+    count++;
+
+    core1Api.methods["auth/login"]("admin", "")
+    .then((session) => {
+      localStorage.setItem("sessionkey", session.sessionkey);
+      this.checksession();
+    })
+    .catch((e) => {
+      alert(`Error login ${e}`);
+    });
+  }
+}
+var app = new App();
+
 setTimeout(() => {
-  core1Api.methods.login("admin", "");
+  core1Api.callbacks.testsse = (x) => { console.error("SSE ", x) };
+  app.checksession();
 }, 1000);
 
 </script>
