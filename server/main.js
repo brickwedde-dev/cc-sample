@@ -1,4 +1,5 @@
-const { StorageNedbApi } = require("./cc-server/storage-nedb.js");
+const { StorageNedbPlugin } = require("./cc-server/storage-nedb.js");
+const { AuthSimplePlugin } = require("./cc-server/authsimple.js");
 const { Core } = require("./cc-server/core.js");
 const fssync = require('fs');
 
@@ -10,14 +11,15 @@ var options = {
     },
 };
 
-var authStorage = new StorageNedbApi(["users", "sessions"], options)
+var authStorage = new StorageNedbPlugin(["users", "sessions"], options)
 var authPlugin = new AuthSimplePlugin(authStorage, "users", "sessions");
 
 var core = new Core();
 core.authPlugin = authPlugin;
+core.addPlugin("auth", authPlugin);
 
-var storage = new StorageNedbApi(["test1", "test2"], options)
-core.storages.push(storage);
+var storage = new StorageNedbPlugin(["test1", "test2"], options)
+core.addPlugin("teststorage", storage);
 
 var mapping = [
     { hosts: [], urlprefix: "/core1", core : core },
