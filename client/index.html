@@ -27,12 +27,16 @@
 <script type="text/javascript" src="cc-app/CcApp.js"></script>
 </head>
 <body>
-<cc-api src="/api"></cc-api>
+<cc-api src="/core1"></cc-api>
 <cc-app drawerstyle="tree"></cc-app>
 
 <script type="text/javascript">
 
 var ccApp = document.querySelector("cc-app");
+var core1Api = document.querySelector("cc-api");
+setTimeout(() => {
+  core1Api.methods.login("admin", "");
+}, 1000);
 
 </script>
 </body>
