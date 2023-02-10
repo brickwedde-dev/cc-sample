@@ -10,11 +10,17 @@ var options = {
     },
 };
 
-var storage = new StorageNedbApi(["test1", "test2"], options)
+var authStorage = new StorageNedbApi(["users", "sessions"], options)
+var authPlugin = new AuthSimplePlugin(authStorage, "users", "sessions");
+
 var core = new Core();
+core.authPlugin = authPlugin;
+
+var storage = new StorageNedbApi(["test1", "test2"], options)
+core.storages.push(storage);
 
 var mapping = [
-    { hosts: [], urlprefix: "/core", core : core },
+    { hosts: [], urlprefix: "/core1", core : core },
     
     { hosts: [], exacturl: "/", staticfile : "../client/index.html"},
     { hosts: [], urlprefix: "/", staticfile : "../client"},
