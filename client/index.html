@@ -24,6 +24,7 @@
 <script type="text/javascript" src="cc-material-helpers/CcAceEditor.js"></script>
 <script type="text/javascript" src="cc-material-helpers/CcMdcFloatingActionButton.js"></script>
 <script type="text/javascript" src="cc-api-client/CcApi2.js"></script>
+<script type="text/javascript" src="cc-api-client/CcSimpleAuthLoginDlg.js"></script>
 <script type="text/javascript" src="cc-app/CcApp.js"></script>
 </head>
 <body>
@@ -32,47 +33,75 @@
 
 <script type="text/javascript">
 
-var ccApp = document.querySelector("cc-app");
-var core1Api = document.querySelector("cc-api");
-
-var count = 0;
-
 class App {
+  constructor() {
+    this.ccApp = document.querySelector("cc-app");
+    this.core1Api = document.querySelector("cc-api");
+
+    this.core1Api.callbacks.testsse = (x) => { console.error("SSE ", x) };
+    this.checksession();
+  }
+
   checksession() {
-    core1Api.authorizationBearer = localStorage.getItem("sessionkey");
-    core1Api.methods["auth/checksessionkey"]()
+    this.core1Api.authorizationBearer = localStorage.getItem("sessionkey");
+    this.core1Api.plugins.auth.checksessionkey()
     .then((oInfo) => {
+      this.core1Api.updateEventConnection();
       this.session = oInfo.session;
       this.user = oInfo.user;
+      try {
+        this.fillStates()
+      } catch (e) {
+        console.error(e);
+      }
     })
     .catch((e) => {
+      console.error("Login error: " + e)
       this.doLogin();
     });
   }
 
   doLogin() {
-    if (count > 0) {
-      alert("failed")
-      return;
-    }
-    count++;
-
-    core1Api.methods["auth/login"]("admin", "")
-    .then((session) => {
-      localStorage.setItem("sessionkey", session.sessionkey);
-      this.checksession();
-    })
-    .catch((e) => {
-      alert(`Error login ${e}`);
+    showLoginDialog (this.core1Api, (ok) => {
+      if (ok) {
+        this.checksession();
+      }
     });
   }
+
+  clearStates() {
+    this.rootState = new CcPageState("Login", "storage", "login", (element) => {
+      element.innerHTML = ``;
+    });
+    this.ccApp.addRootState(this.rootState);
+  }
+
+  fillStates() {
+    this.rootState = new CcPageState("Übersicht", "storage", "pages", (element) => {
+      element.innerHTML = `
+      `;
+    });
+    this.ccApp.addRootState(this.rootState);
+
+    this.logoutState = new CcPageState("Logout", "storage", "pages", (element) => {
+      this.core1Api.plugins.auth.invalidatesessionkey()
+      .then((p) => {
+        throw "What???";
+      })
+      .catch(() => {
+        localStorage.setItem("sessionkey", "");
+        this.clearStates();
+        this.checksession();
+      });
+    });
+    this.ccApp.addState(this.logoutState);
+  }
 }
-var app = new App();
 
 setTimeout(() => {
-  core1Api.callbacks.testsse = (x) => { console.error("SSE ", x) };
-  app.checksession();
-}, 1000);
+  var app = new App();
+}, 10);
+
 
 </script>
 </body>
