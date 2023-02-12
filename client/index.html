@@ -25,7 +25,27 @@
 <script type="text/javascript" src="cc-material-helpers/CcMdcFloatingActionButton.js"></script>
 <script type="text/javascript" src="cc-api-client/CcApi2.js"></script>
 <script type="text/javascript" src="cc-api-client/CcSimpleAuthLoginDlg.js"></script>
+<script type="text/javascript" src="cc-api-client/CcSimpleAuthUserList.js"></script>
+<script type="text/javascript" src="cc-api-client/CcSimpleAuthUserEditor.js"></script>
 <script type="text/javascript" src="cc-app/CcApp.js"></script>
+<script type="text/javascript" src="cc-big-table/CcBigTable.js"></script>
+<style>
+:root {
+  --mdc-theme-primary: rgb(62, 56, 66);
+  --mdc-theme-secondary: #B9A4CE;
+}
+body {
+  color: rgb(62, 56, 66);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: Roboto, sans-serif;
+}
+.ellipsis {
+  text-overflow :ellipsis;
+  overflow : hidden;
+  white-space : nowrap;
+}
+</style>
 </head>
 <body>
 <cc-api src="/core1"></cc-api>
@@ -38,7 +58,7 @@ class App {
     this.ccApp = document.querySelector("cc-app");
     this.core1Api = document.querySelector("cc-api");
 
-    this.core1Api.callbacks.testsse = (x) => { console.error("SSE ", x) };
+    this.core1Api.callbacks.testsse = (x) => { console.debug("SSE ", x) };
     this.checksession();
   }
 
@@ -70,20 +90,27 @@ class App {
   }
 
   clearStates() {
-    this.rootState = new CcPageState("Login", "storage", "login", (element) => {
+    var rootState = new CcPageState("Login", "storage", "login", (element) => {
       element.innerHTML = ``;
     });
-    this.ccApp.addRootState(this.rootState);
+    this.ccApp.addRootState(rootState);
   }
 
   fillStates() {
-    this.rootState = new CcPageState("Übersicht", "storage", "pages", (element) => {
-      element.innerHTML = `
-      `;
+    var rootState = new CcPageState("Übersicht", "storage", "pages", (element) => {
+      element.innerHTML = ``;
     });
-    this.ccApp.addRootState(this.rootState);
+    this.ccApp.addRootState(rootState);
 
-    this.logoutState = new CcPageState("Logout", "storage", "pages", (element) => {
+    if (this.user && this.user.features.admin) {
+      var editUsersState = new CcPageState("Benutzer", "account_circle", "users", (element) => {
+        element.style.padding = "10px";
+        element.innerHTML = `<ccsimpleauth-user-list></ccsimpleauth-user-list>`;
+      });
+      this.ccApp.addState(editUsersState);
+    }
+
+    var logoutState = new CcPageState("Logout", "storage", "pages", (element) => {
       this.core1Api.plugins.auth.invalidatesessionkey()
       .then((p) => {
         throw "What???";
@@ -94,14 +121,11 @@ class App {
         this.checksession();
       });
     });
-    this.ccApp.addState(this.logoutState);
+    this.ccApp.addState(logoutState);
   }
 }
 
-setTimeout(() => {
-  var app = new App();
-}, 10);
-
+var app = new App();
 
 </script>
 </body>
