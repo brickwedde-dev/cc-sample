@@ -26,3 +26,7 @@
 	path = client/cc-big-table
 	url = https://github.com/brickwedde-dev/cc-big-table
 	branch = main
+[submodule "client/cc-dynamicform-client"]
+	path = client/cc-dynamicform-client
+	url = https://github.com/brickwedde-dev/cc-dynamicform-client
+	branch = main
