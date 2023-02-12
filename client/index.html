@@ -104,8 +104,11 @@ class App {
 
     if (this.user && this.user.features.admin) {
       var editUsersState = new CcPageState("Benutzer", "account_circle", "users", (element) => {
-        element.style.padding = "10px";
-        element.innerHTML = `<ccsimpleauth-user-list></ccsimpleauth-user-list>`;
+        var l = new CcSimpleAuthUserList();
+        l.authApi = app.core1Api.plugins.auth;
+
+        element.innerHTML = ``;
+        element.appendChild(l);
       });
       this.ccApp.addState(editUsersState);
     }
