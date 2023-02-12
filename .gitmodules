@@ -22,3 +22,7 @@
 	path = server/cc-server
 	url = https://github.com/brickwedde-dev/cc-server
 	branch = main
+[submodule "client/cc-big-table"]
+	path = client/cc-big-table
+	url = https://github.com/brickwedde-dev/cc-big-table
+	branch = main
