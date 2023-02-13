@@ -1,6 +1,7 @@
 const { StorageNedbPlugin } = require("./cc-server/storage-nedb.js");
 const { AuthSimplePlugin } = require("./cc-server/authsimple.js");
 const { SsePlugin } = require("./cc-server/sse.js");
+const { DynamicFormPlugin } = require("./cc-server/dynform.js");
 const { Core } = require("./cc-server/core.js");
 const fssync = require('fs');
 
@@ -34,9 +35,14 @@ core.addPlugin("sse", ssePlugin);
 var storage = new StorageNedbPlugin(["test1", "test2"], options)
 core.addPlugin("teststorage", storage);
 
+var dynform = new DynamicFormPlugin();
+core.addPlugin("dynamicform", dynform);
+
 var mapping = [
     { hosts: [], urlprefix: "/core1", core : core },
-    
+
+    { hosts: [], urlprefix: "/dynform", staticfile : "../dynform/definition"},
+
     { hosts: [], exacturl: "/", staticfile : "../client/index.html"},
     { hosts: [], urlprefix: "/", staticfile : "../client"},
 ];

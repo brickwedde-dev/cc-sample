@@ -29,6 +29,8 @@
 <script type="text/javascript" src="cc-api-client/CcSimpleAuthUserEditor.js"></script>
 <script type="text/javascript" src="cc-app/CcApp.js"></script>
 <script type="text/javascript" src="cc-big-table/CcBigTable.js"></script>
+<script type="text/javascript" src="cc-dynamicform-client/CcDynamicForm.js"></script>
+<script type="text/javascript" src="cc-dynamicform-client/CcDynamicFormAdmin.js"></script>
 <style>
 :root {
   --mdc-theme-primary: rgb(62, 56, 66);
@@ -101,6 +103,29 @@ class App {
       element.innerHTML = ``;
     });
     this.ccApp.addRootState(rootState);
+
+      var state = new CcPageState("neu", "account_circle", "neudynform", (element) => {
+        element.innerHTML = ``;
+        var ccDynForm = new CcDynamicForm("selbstbewertung", this.core1Api.plugins.dynamicform);
+        element.appendChild(ccDynForm);
+      });
+      this.ccApp.addState(state);
+
+      var state = new CcPageState("load", "account_circle", "loaddynform", (element) => {
+        element.innerHTML = ``;
+        var ccDynForm = new CcDynamicForm("selbstbewertung", this.core1Api.plugins.dynamicform);
+        ccDynForm.load("016f73dc78f53a4ffb004848a599049e4d35f95d7583c8c5e7698b96e51b99e7");
+        element.appendChild(ccDynForm);
+      });
+      this.ccApp.addState(state);
+
+      var state = new CcPageState("edit name", "account_circle", "editnamedynform", (element) => {
+        element.innerHTML = ``;
+        var ccDynForm = new CcDynamicForm("internebewertung", this.core1Api.plugins.dynamicform);
+        ccDynForm.load("016f73dc78f53a4ffb004848a599049e4d35f95d7583c8c5e7698b96e51b99e7");
+        element.appendChild(ccDynForm);
+      });
+      this.ccApp.addState(state);
 
     if (this.user && this.user.features.admin) {
       var editUsersState = new CcPageState("Benutzer", "account_circle", "users", (element) => {
